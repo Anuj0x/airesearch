@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anuj Kumar - AI Research & GPU Optimization Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;600;800&display=swap" rel="stylesheet">
+    <!-- Load Three.js library for 3D background effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* Custom Styles for a clean, professional dark theme based on GitHub/VSCode aesthetics */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* Dark background */
+            color: #c9d1d9; /* Light text */
+            scroll-behavior: smooth;
+        }
+        
+        /* Three.js Canvas Styling: Fixed to background */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Ensures it stays behind all content */
+            opacity: 0.8; /* Subtle transparency */
+        }
+        
+        /* Content Section Styling: Opaque and elevated */
+        .content-section {
+            /* Semi-transparent dark background for content blocks for readability */
+            background-color: rgba(22, 27, 34, 0.95); 
+            border: 1px solid #30363d; /* Subtle border */
+            position: relative; /* Ensures content sits above the canvas */
+            z-index: 1; 
+        }
+        
+        /* Skill Pill Styling */
+        .skill-pill {
+            display: inline-block;
+            padding: 0.3rem 0.75rem;
+            margin: 0.25rem;
+            border-radius: 9999px;
+            font-size: 0.75rem; /* Smaller font for dense list */
+            font-weight: 500;
+            background-color: #21262d;
+            color: #8be9fd; /* Cyan text for keywords */
+            white-space: nowrap;
+        }
+        /* Experience Card Styling */
+        .exp-card {
+            border-left: 3px solid #58a6ff;
+            transition: all 0.3s ease;
+        }
+        .exp-card:hover {
+            background-color: #1f242c;
+        }
+        /* GitHub Project Card - Clickable link container */
+        .project-card {
+            display: block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #30363d;
+            text-decoration: none;
+            color: inherit;
+        }
+        .project-card:hover {
+            border-color: #58a6ff;
+            background-color: #1f242c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(88, 166, 255, 0.1);
+        }
+        .project-title-link {
+             color: #c9d1d9;
+        }
+        .project-card:hover .project-title-link {
+            color: #58a6ff;
+        }
+        /* Styling for the sticky header */
+        .sticky-header {
+            background-color: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #30363d;
+            position: relative; /* Ensure header is on top of other content sections */
+            z-index: 10;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #58a6ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Three.js Canvas element (the background) -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Main Content Wrapper -->
+    <div class="p-4 sm:p-8 max-w-7xl mx-auto relative z-10">
+
+        <!-- Header/Navigation (Sticky) -->
+        <header class="sticky top-0 z-50 py-4 mb-8 rounded-b-xl sticky-header">
+            <nav class="flex justify-center space-x-4 sm:space-x-8 text-sm sm:text-base font-semibold">
+                <!-- Internal Navigation Links -->
+                <a href="#summary" class="hover:text-[#58a6ff] transition duration-200">Summary</a>
+                <a href="#skills" class="hover:text-[#58a6ff] transition duration-200">Skills</a>
+                <a href="#experience" class="hover:text-[#58a6ff] transition duration-200">Experience</a>
+                <a href="#projects" class="hover:text-[#58a6ff] transition duration-200">Projects</a>
+                <a href="#ai-demo" class="hover:text-[#58a6ff] transition duration-200">AI Demo</a>
+                <!-- External Contact/Social Links -->
+                <a href="https://www.linkedin.com/in/anuj0x" target="_blank" class="text-blue-400 hover:text-blue-300 transition duration-200">LinkedIn</a>
+                <a href="https://github.com/anuj0x" target="_blank" class="text-gray-400 hover:text-white transition duration-200">GitHub</a>
+            </nav>
+        </header>
+
+        <!-- 1. HERO / CONTACT SECTION -->
+        <section id="hero" class="content-section p-6 sm:p-10 rounded-2xl shadow-xl mb-12 flex flex-col items-center text-center">
+            <!-- 
+                PROFILE PHOTO: 
+                The fallback placeholder image will be used if the main image file is not found.
+            -->
+            <img src="anuj.jpg" onerror="this.onerror=null;this.src='https://placehold.co/150x150/161b22/c9d1d9?text=AK';" alt="Anuj Kumar Profile" class="w-32 h-32 sm:w-40 sm:h-40 rounded-full object-cover border-4 border-[#58a6ff] shadow-lg mb-4">
+            
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#58a6ff] to-[#8be9fd] mb-1">Anuj Kumar</h1>
+            <h2 class="text-xl sm:text-3xl font-light text-[#c9d1d9] mb-4">AI Research Scientist </h2>
+            
+            <div class="mt-4 flex flex-wrap justify-center gap-4 text-sm sm:text-base">
+                <!-- Email Link -->
+                <a href="mailto:anujkumarsingh9929@gmail.com" class="flex items-center text-gray-400 hover:text-white transition duration-200">
+                    <svg class="w-5 h-5 mr-1 text-[#58a6ff]" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                    anujkumarsingh9929@gmail.com
+                </a>
+                <!-- Phone Link -->
+                <a href="tel:7017694570" class="flex items-center text-gray-400 hover:text-white transition duration-200">
+                    <svg class="w-5 h-5 mr-1 text-[#58a6ff]" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74A1 1 0 0118 16.847V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                    +917017694570
+                </a>
+            </div>
+            <p class="mt-4 text-sm text-gray-500">
+                CDLSIET (2020-24) | CGPA: 8.3 | Aligarh Muslim University XIIth SHSSS | GATE Qualified 2024
+            </p>
+        </section>
+
+        <!-- 2. SUMMARY SECTION -->
+        <section id="summary" class="content-section p-6 sm:p-8 rounded-2xl shadow-xl mb-12">
+            <h3 class="text-3xl font-bold mb-4 text-[#58a6ff] border-b border-[#30363d] pb-2">Summary</h3>
+            <p class="text-md text-gray-300">
+                AI Research scientist in field Deep-Learning, AI-training, Computer-Vision, GPU-optimisation, reinforcement-learning, Forecast, Blockchain.
+            </p>
+        </section>
+        
+        <!-- 3. WORK EXPERIENCE SECTION -->
+        <section id="experience" class="content-section p-6 sm:p-8 rounded-2xl shadow-xl mb-12">
+            <h3 class="text-3xl font-bold mb-6 text-[#58a6ff] border-b border-[#30363d] pb-2">Work Experience</h3>
+
+            <div class="space-y-6">
+                
+                <!-- Experience Card: Founder, Meduxa.ai -->
+                <div class="exp-card p-4 pl-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h4 class="text-xl font-bold">Founder, Meduxa.ai</h4>
+                        <span class="text-sm font-medium text-gray-400">Jul 2024 – Present (Remote)</span>
+                    </div>
+                    <p class="text-md text-gray-300 mt-1">Founded deep-tech startup developing low-bit metal-kerneled libraries replacing CUTLASS and CuBLAS kernels with enhanced computational performance. Engineered novel scan algorithms and disaggregated LLM inference architectures optimized for finance, customer service, and long-pipeline applications.</p>
+                </div>
+
+                <!-- Experience Card: AI Research Scientist, ContactPoint 360 -->
+                <div class="exp-card p-4 pl-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h4 class="text-xl font-bold">AI Research Scientist, ContactPoint 360</h4>
+                        <span class="text-sm font-medium text-gray-400">Dec 2024 – Present (Toronto, Bengaluru)</span>
+                    </div>
+                    <p class="text-md text-gray-300 mt-1">Delivered enterprise AI solutions for US Military, Enercare, FlairAirlines, Zinus, and Metergy.</p>
+                </div>
+
+                <!-- Experience Card: Generative AI Engineer, H2R.ai -->
+                <div class="exp-card p-4 pl-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h4 class="text-xl font-bold">Generative AI Engineer, H2R.ai</h4>
+                        <span class="text-sm font-medium text-gray-400">Dec 2024 – Present (Toronto)</span>
+                    </div>
+                    <p class="text-md text-gray-300 mt-1">Developed next-generation resume processing using DeBERTa-v3, cross-encoders, and BERTopic with reinforcement learning for semantic matching. Engineered dynamic feature extraction using Unstructured.io and DeepDoctection. Applied meta-learning, neural architecture search, and Bayesian optimization for adaptive real-time scoring at scale. Built job description generator scraping real-time job market data with advanced LLMs using ReActFlow, TrueJudge-AI, and AutoGPT for dynamic task decomposition, continuous refinement, self-reflection, real-time tool integration, context-aware evaluation, iterative reasoning, feedback loops, SEO optimization, and market data alignment. Implemented multimodal vision-language fusion integrating diverse data modalities and semantic relationships across heterogeneous inputs for downstream tasks.</p>
+                </div>
+
+                <!-- Experience Card: LLM Researcher, BeyondQA -->
+                <div class="exp-card p-4 pl-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h4 class="text-xl font-bold">LLM Researcher, BeyondQA</h4>
+                        <span class="text-sm font-medium text-gray-400">Dec 2024 – Present (Toronto)</span>
+                    </div>
+                    <p class="text-md text-gray-300 mt-1">Developed topic-evolution and semantic-shift tracking on large-scale data using Latent Diffusion Models, Dynamic Time Warping, and Self-Supervised Contrastive Learning with DINOv2. Built semantic graph infrastructure for long-context data leveraging Graph Neural Networks, Neo4j, time-aware embeddings, Reinformer, Longformer, and adaptive attention mechanisms. Trained chatbot systems using RLHF, 3D Rotary Position Embeddings, temporal Q-learning, ReAct, AutoGPT, speculative decoding, distillation, FlashAttention3, function calling, Mixture of Experts, and sparse routing. Implemented visualization pipelines with UMAP, Nomad Atlas, LangGraph, and Bokeh.</p>
+                </div>
+
+                <!-- Experience Card: Demand Forecast Researcher, Scheduly.ai -->
+                <div class="exp-card p-4 pl-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h4 class="text-xl font-bold">Demand Forecast Researcher, Scheduly.ai</h4>
+                        <span class="text-sm font-medium text-gray-400">Dec 2024 – Present (Toronto)</span>
+                    </div>
+                    <p class="text-md text-gray-300 mt-1">Built large-scale scheduling optimizer for NEPHROPLUS DIALYSIS CENTER handling high-dimensional variable spaces with real-time constraints and neural combinatorial methods for adaptive scheduling under uncertainty. Conducted research in time series forecasting for call demand prediction using Vision Language Models and Temporal Graph Attention Networks. Developed custom demand forecasting models using Temporal Fusion Transformer, N-BEATS, and DeepAR with wavelet decomposition and Fourier transforms for multi-horizon predictions. Implemented probabilistic forecasting with quantile regression and ensemble methods for uncertainty-aware predictions with continuous hyperparameter optimization and regularization.</p>
+                </div>
+
+                <!-- Experience Card: ASR Researcher, V2N.ai -->
+                <div class="exp-card p-4 pl-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h4 class="text-xl font-bold">ASR Researcher, V2N.ai</h4>
+                        <span class="text-sm font-medium text-gray-400">Dec 2024 – Present (Toronto)</span>
+                    </div>
+                    <p class="text-md text-gray-300 mt-1">Engineered real-time transcription with BERT time-aware embeddings and deep contextual semantics for Neo4j knowledge graphs with dynamic relationship mapping. Integrated CRM database connections using Kafka event-driven Robotic Process Automation with UiPath automated workflows. Applied homomorphic encryption for security across processing pipelines. Optimized performance using Triton, CUTLASS kernels, RAPIDS, and SGEMM kernel processing for maximum throughput. Deployed inference pipelines with TensorRT and NIM for production environments. Leveraged ring FlashAttention and ZeRO-3 optimization for training on transcribed data. Implemented Mosanet and DeltaNet architectures for long-context search across large-scale data repositories.</p>
+                </div>
+
+                <!-- Experience Card: Freelance AI architect, Fiverr-based -->
+                <div class="exp-card p-4 pl-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h4 class="text-xl font-bold">Freelance AI architect, Fiverr-based</h4>
+                        <span class="text-sm font-medium text-gray-400">Jul 2024 – Nov 2024 (Remote)</span>
+                    </div>
+                    <p class="text-md text-gray-300 mt-1">Developed GeoLLM for ISRO Hackathon by fine-tuning LLaMA2 and GPT-3.5 on OpenStreetMap and tabular data for geospatial information retrieval. Achieved 70 percent R-squared improvement over deep neural network baselines with scalable prompt tuning and auxiliary map embeddings for population and economic prediction from remote sensing data.</p>
+                </div>
+
+                <!-- Experience Card: Deep Learning Researcher, Foresight Systems Group Inc. -->
+                <div class="exp-card p-4 pl-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h4 class="text-xl font-bold">Deep Learning Researcher, Foresight Systems Group Inc.</h4>
+                        <span class="text-sm font-medium text-gray-400">Aug 2023 – Jun 2024 (Toronto)</span>
+                    </div>
+                    <p class="text-md text-gray-300 mt-1">Trained 124-million-parameter GPT-2 on OpenWebText using nanoGPT with 8 A100 GPUs achieving 1.47 validation loss with optimized char-level tokenization. Simplified training loop and model setup using PyTorch, Transformers, and Weights and Biases with support for OpenAI weight loading and dataset sampling. Built character-level autoregressive models from bigram to Transformer architectures on niche datasets including names, Scrabble words, and startups. Integrated activation tracing, gradient flow, batch normalization, and WaveNet-style dilation for deep generative modeling and text synthesis. Developed Micrograd scalar-based autograd engine with directed acyclic graph-based reverse-mode automatic differentiation, dynamic computation graphs, and modular neural network API. Implemented topological forward and reverse passes with chain-rule gradient propagation for neural network abstractions and layer stacking.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 4. SKILLS MATRIX SECTION -->
+        <section id="skills" class="content-section p-6 sm:p-8 rounded-2xl shadow-xl mb-12">
+            <h3 class="text-3xl font-bold mb-6 text-[#58a6ff] border-b border-[#30363d] pb-2">Technical Expertise</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Skill Group 1: Programming languages, scripting -->
+                <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">Programming & Scripting</h4>
+                    <div class="flex flex-wrap" id="prog-skills"></div>
+                </div>
+
+                <!-- Skill Group 2: AI hardware, GPU, high-performance computing -->
+                <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">AI Hardware, GPU, HPC</h4>
+                    <div class="flex flex-wrap" id="gpu-skills"></div>
+                </div>
+
+                <!-- Skill Group 3: Computer vision, 3D perception, graphics -->
+                <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">Computer Vision & 3D Graphics</h4>
+                    <div class="flex flex-wrap" id="vision-skills"></div>
+                </div>
+
+                <!-- Skill Group 4: Deep learning, state of the art AI (Wide slot) -->
+                <div class="p-4 rounded-lg bg-gray-800/20 md:col-span-2 lg:col-span-3">
+                    <h4 class="text-lg font-semibold mb-2 text-white">Deep Learning, State-of-the-Art AI</h4>
+                    <div class="flex flex-wrap" id="ai-skills"></div>
+                </div>
+
+                <!-- Skill Group 5: Retrieval, ranking, topic modeling, optimization frameworks -->
+                <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">Retrieval, Ranking & Optimization Frameworks</h4>
+                    <div class="flex flex-wrap" id="retrieval-skills"></div>
+                </div>
+                
+                <!-- Skill Group 6: Time series, forecasting , sequential models -->
+                <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">Time Series & Forecasting</h4>
+                    <div class="flex flex-wrap" id="ts-skills"></div>
+                </div>
+
+                <!-- Skill Group 7: Optimisation, mathematical programming -->
+                <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">Mathematical Optimization</h4>
+                    <div class="flex flex-wrap" id="math-opt-skills"></div>
+                </div>
+
+                <!-- Skill Group 8: Reinforcement learning and control theory -->
+                <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">Reinforcement Learning & Control Theory</h4>
+                    <div class="flex flex-wrap" id="rl-skills"></div>
+                </div>
+                
+                <!-- Skill Group 9: DevOps, cloud, SRE, tooling -->
+                <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">DevOps, Cloud, SRE</h4>
+                    <div class="flex flex-wrap" id="devops-skills"></div>
+                </div>
+
+                <!-- Skill Group 10: Blockchain, Web3, DeFi, on-chain systems -->
+                <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">Blockchain, Web3, DeFi</h4>
+                    <div class="flex flex-wrap" id="web3-skills"></div>
+                </div>
+                
+                <!-- Skill Group 11: Quantum AI and circuits -->
+                <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">Quantum AI & Circuits</h4>
+                    <div class="flex flex-wrap" id="quantum-skills"></div>
+                </div>
+
+                <!-- Skill Group 12: Webdev -->
+                 <div class="p-4 rounded-lg bg-gray-800/20">
+                    <h4 class="text-lg font-semibold mb-2 text-white">Web Development</h4>
+                    <div class="flex flex-wrap" id="webdev-skills"></div>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- 5. PROJECTS SECTION (Clickable Titles Only) -->
+        <section id="projects" class="content-section p-6 sm:p-8 rounded-2xl shadow-xl mb-12">
+            <h3 class="text-3xl font-bold mb-6 text-[#58a6ff] border-b border-[#30363d] pb-2">GitHub Projects: Codebase & Research Artifacts (Click to visit)</h3>
+            
+            <div id="project-folders" class="space-y-6">
+                <!-- Projects will be generated here by JS -->
+            </div>
+            
+        </section>
+
+        <!-- 6. AI IMAGE GENERATION DEMO (IMAGEN INTEGRATION) -->
+        <section id="ai-demo" class="content-section p-6 sm:p-8 rounded-2xl shadow-xl mb-12">
+            <h3 class="text-3xl font-bold mb-6 text-[#58a6ff] border-b border-[#30363d] pb-2">AI Art Generation Demo (Imagen)</h3>
+            <p class="text-md text-gray-400 mb-4">Demonstrate generative AI capabilities. Enter a prompt to generate an image using the Imagen model.</p>
+            
+            <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <input type="text" id="promptInput" placeholder="e.g., A minimalist rendering of a quantum circuit in a neon green style"
+                       class="flex-grow p-3 rounded-lg border border-[#30363d] bg-[#0d1117] text-white focus:outline-none focus:ring-2 focus:ring-[#58a6ff]"
+                       value="A highly detailed 3D rendering of a GPU optimization kernel glowing with blue and cyan light, cinematic, 8k">
+                <button id="generateBtn"
+                        class="px-6 py-3 bg-[#58a6ff] text-white font-bold rounded-lg hover:bg-[#4a8cd2] transition duration-200 shadow-md whitespace-nowrap">
+                    Generate Image
+                </button>
+            </div>
+
+            <div id="loadingIndicator" class="text-center py-8" style="display: none;">
+                <div class="spinner mb-2"></div>
+                <p class="text-gray-400">Generating image... This may take a moment.</p>
+            </div>
+
+            <div id="errorBox" class="p-4 bg-red-900/40 border border-red-700 rounded-lg text-red-300" style="display: none;">
+                <p><strong>Error:</strong> <span id="errorMessage"></span></p>
+                <p class="text-sm mt-1">Check your prompt or the browser console for details.</p>
+            </div>
+
+            <div id="imageOutput" class="mt-6 flex justify-center">
+                <img id="resultImage" src="" alt="Generated AI Image" 
+                     class="max-w-full h-auto rounded-xl shadow-2xl border border-[#30363d]" 
+                     style="display: none; max-height: 600px;">
+            </div>
+        </section>
+
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-sm text-gray-500 py-4 border-t border-[#30363d]">
+            <p>Built as a static HTML portfolio. &copy; 2025 Anuj Kumar.</p>
+        </footer>
+
+    </div>
+
+    <!-- JavaScript for Dynamic Content, Skill Rendering, Three.js Background, and AI Demo -->
+    <script>
+        // --- DATA SECTION ---
+        const SKILL_DATA = {
+            // Programming languages, scripting
+            'prog-skills': ['Python', 'JavaScript', 'Three.js', 'p5.js', 'Rust', 'C++', 'R', 'Zsh', 'Bash', 'Ether.js', 'Cirq', 'Solidity'],
+            
+            // Deep learning, state of the art AI (Updated to single list as requested)
+            'ai-skills': ['CNN', 'RNN', 'LSTM', 'GRU', 'ResNet', 'Transformer', 'GNN', 'AutoEncoders (denoise | deepconv | variational)', 'BERT', 'GAN (deepConv | stylegan | cycleGAN | pix2pix | wasserstein)', 'WaveNet', 'MLOps', 'Bert4Rec', 'UMAP', 'Diffusion Maps', 'RoPE', '3D RPE', 'LongLoRA', 'Dynamic Attention Routing', 'PeFT', 'AdapterFusion', 'Prefix Tuning', 'DPO', 'Chain of Thought', 'Self-Consistency', 'Function Calling', 'MoE', 'Sparse Routing', 'Flash Attention 3', 'Speculative Decoding', 'Distillation', 'GPTQ', 'AWQ', 'LoRA', 'QLORA', 'Reinformer', 'Longformer', 'Adaptive Attention', 'Meta-Learning', 'Prompt Encoding', 'BART', 'RoBERTa', 'DistilBERT', 'RLAIF', 'Multi-Head Latent Attention', 'Switch Transformer', 'Neural Architecture Search', 'Multimodal Fusion', 'Cross-Attention Transformer', 'Speech-Vision-Text Pipelines', 'Vision-Language Fusion', 'RAG', 'LangGraph'],
+            
+            // Retrieval, ranking, topic modeling, optimization frameworks
+            'retrieval-skills': ['Redis', 'MongoDB', 'Elastic Net', 'ColBERT', 'RankGPT', 'Neo4j', 'BERTopic', 'Temporal Attention', 'Optuna', 'ASHA', 'TPE', 'ReAct', 'AutoGPT', 'Agentic LLMs', 'TruthfulQA'],
+            
+            // Time series, forecasting, sequential models
+            'ts-skills': ['FNO', 'TFT', 'GNN', 'DeepAR', 'NBeats', 'TimesFM', 'Vision LLM based', 'LSTM Stack', 'TCN based', 'MoirAI', 'Quantum Kernel LSTM', 'Line Graph Convolution'],
+
+            // Optimisation, mathematical programming
+            'math-opt-skills': ['MIP', 'Constraint Programming', 'Reinforcement Learning Scheduling', 'Evolutionary Algorithms', 'Neural Combinatorial Optimization', 'KKT Conditions'],
+
+            // AI hardware, GPU, high-performance computing
+            'gpu-skills': ['CUDA', 'cuDNN', 'cuBLAS', 'Cutlass', 'TensorRT', 'Triton', 'CuPy', 'SYCL', 'SGEMM', 'CuTe', 'Flash Attention 3', 'Ring Attention', 'Low-Bit Metal Kernels', 'Scan', 'NIM', 'RAPIDS', 'nvshmem', 'DirectCompute', 'Flash Inference', 'HPC', 'ZeRO-3', 'Jetson', 'RTX', 'Compiler Design', 'MesaNet', 'DeltaNet'],
+
+            // Computer vision, 3D perception, graphics
+            'vision-skills': ['Vision Transformers', 'Swin Transformer', 'DeepLabv3+', 'StyleGAN3', '3D CNNs', 'LiDAR', 'SLAM', 'GAN', 'VAE', 'YOLOv10', 'OpenCV', 'OpenGL', 'Mask R-CNN', 'Faster R-CNN', 'Physics Engine', 'Xception', 'U-Net', 'VGG', 'Capsule Networks', 'MobileNet', 'EfficientNet', 'DenseNet', 'Camera Calibration', 'Radiometry', 'Edge Detection', 'Optical Flow', 'Reflectance', 'Pose Estimation', 'Neural Style Transfer', '3D Reconstruction', 'Adversarial Attack', 'Edge Computing'],
+
+            // Blockchain, Web3, DeFi, on-chain systems
+            'web3-skills': ['Uniswap V3', 'Maker DAO', 'AAVE V3', 'Curve', 'Frax', 'Vote-Escrowed Token', 'Gauge Voting', 'MEV Arbitrage Bot', 'Flashbots', 'ENS', 'Zero-Knowledge Rollups', 'zkSync', 'StarkNet', 'LayerZero Cross-Chain Messaging', 'Gnosis Safe', 'Dark Forest', 'Loot', 'On-Chain Games', 'Metaverse', 'dApp', 'DAO', 'DeFi'],
+
+            // DevOps, cloud, SRE, tooling
+            'devops-skills': ['AWS', 'System Architecture', 'CI/CD', 'Linux', 'Cloud Engineering', 'Kubernetes', 'ArgoCD', 'GitOps', 'Terraform', 'Ansible', 'Jenkins', 'Cybersecurity', 'DSA', 'Prometheus', 'MLflow'],
+
+            // Reinforcement learning and control theory
+            'rl-skills': ['REINFORCE', 'PPO', 'Deep Policy Gradients', 'DDPG', 'A3C', 'Deep Q-Learning', 'Temporal Difference Learning', 'SARSA', 'RLHF', 'Nonlinear Control', 'HJB', 'Transfer Learning', 'Game-based RL', 'Pong from Pixels', 'AlphaGo', 'AlphaGeometry', 'Fluid Dynamics RL', 'Gaussian Processes', 'Recurrent Attention RL'],
+
+            // Quantum AI and circuits
+            'quantum-skills': ['Cirq', 'QAOA', 'VQE', 'CNOT'],
+            
+            // Webdev (Updated)
+            'webdev-skills': ['Django', 'React', 'MERN Stack', 'Three.js', 'p5.js']
+        };
+
+        const PROJECT_DATA = {
+            'Blockchain, Web3': [
+                { name: 'gas-Optimised-DAO', url: 'https://github.com/Anuj0x/gas-Optimised-DAO' },
+                { name: 'Web3-NFT-battle-game-ChainForge-', url: 'https://github.com/Anuj0x/Web3-NFT-battle-game-ChainForge-' },
+                { name: 'SolanaDEX-Arbitrage-Engine', url: 'https://github.com/Anuj0x/SolanaDEX-Arbitrage-Engine' },
+                { name: 'vetoken', url: 'https://github.com/Anuj0x/vetoken' },
+                { name: 'ens-unified', url: 'https://github.com/Anuj0x/ens-unified' },
+                { name: 'CryptoSentinel', url: 'https://github.com/Anuj0x/CryptoSentinel' },
+                { name: 'AaveFlashToolkit', url: 'https://github.com/Anuj0x/AaveFlashToolkit' },
+            ],
+            'Reinforcement Learning': [
+                { name: 'policy-grad-algo', url: 'https://github.com/Anuj0x/policy-grad-algo' },
+                { name: 'ReinForce-X-ddpg', url: 'https://github.com/Anuj0x/ReinForce-X-ddpg' },
+                { name: 'EliteA3C-Enhanced-Distributed-Deep-RL-with-GAE', url: 'https://github.com/Anuj0x/EliteA3C-Enhanced-Distributed-Deep-RL-with-GAE' },
+                { name: 'JAX-Reinforce-ddpg', url: 'https://github.com/Anuj0x/JAX-Reinforce-ddpg' },
+                { name: 'ppo-by-lua-RL', url: 'https://github.com/Anuj0x/ppo-by-lua-RL' },
+                { name: 'MetaFlow', url: 'https://github.com/Anuj0x/MetaFlow' },
+                { name: 'tictactoe-RL', url: 'https://github.com/Anuj0x/tictactoe-RL' },
+                { name: 'snakegame-rl', url: 'https://github.com/Anuj0x/snakegame-rl' },
+                { name: 'snake-game-deep-q-reniforce', url: 'https://github.com/Anuj0x/snake-game-deep-q-reniforce' },
+                { name: 'policygrad-in-rust-burn', url: 'https://github.com/Anuj0x/policygrad-in-rust-burn' },
+                { name: 'BirdBrain-AI-Next-Generation-Gaming-Intelligence', url: 'https://github.com/Anuj0x/BirdBrain-AI-Next-Generation-Gaming-Intelligence' },
+            ],
+            'Transformers, Attention Mechanisms': [
+                { name: 'AttentionX-', url: 'https://github.com/Anuj0x/AttentionX-' },
+                { name: 'CompressNet', url: 'https://github.com/Anuj0x/CompressNet' },
+                { name: 'Neurolink-crossattn', url: 'https://github.com/Anuj0x/Neurolink-crossattn' },
+                { name: 'SmartRoute', url: 'https://github.com/Anuj0x/SmartRoute' },
+                { name: 'SpecInfer-engine', url: 'https://github.com/Anuj0x/SpecInfer-engine' },
+                { name: 'jax-mixtureofexperts', url: 'https://github.com/Anuj0x/jax-mixtureofexperts' },
+                { name: 'ndim-rope-embed', url: 'https://github.com/Anuj0x/ndim-rope-embed' },
+                { name: 'numpy-torch-scratch-transformer-chatbot', url: 'https://github.com/Anuj0x/numpy-torch-scratch-transformer-chatbot' },
+                { name: 'gametheoryChainOfThought-nashMind-', url: 'https://github.com/Anuj0x/gametheoryChainOfThought-nashMind-' },
+                { name: 'varEncode', url: 'https://github.com/Anuj0x/varEncode' },
+                { name: 'PYTORCH-library-in-LUA', url: 'https://github.com/Anuj0x/PYTORCH-library-in-LUA' },
+            ],
+            'Computer Vision': [
+                { name: '3D-Scene-Reconstruction-ImplicitForge', url: 'https://github.com/Anuj0x/3D-Scene-Reconstruction-ImplicitForge' },
+                { name: '3d-perception-framework', url: 'https://github.com/Anuj0x/3d-perception-framework' },
+                { name: 'LightningSeg', url: 'https://github.com/Anuj0x/LightningSeg' },
+                { name: 'MediSegNet-Cutting-Edge-Volumetric-Segmentation-Networks', url: 'https://github.com/Anuj0x/MediSegNet-Cutting-Edge-Volumetric-Segmentation-Networks' },
+                { name: 'Fourier-neural-for-fluid-dynamics-simulation', url: 'https://github.com/Anuj0x/Fourier-neural-for-fluid-dynamics-simulation' },
+                { name: 'PointStream-AI', url: 'https://github.com/Anuj0x/PointStream-AI' },
+                { name: 'VISION', url: 'https://github.com/Anuj0x/VISION' },
+                { name: 'Vision-Point-3d', url: 'https://github.com/Anuj0x/Vision-Point-3d' },
+                { name: 'modern-Unet', url: 'https://github.com/Anuj0x/modern-Unet' },
+                { name: 'openGL-gymnasium', url: 'https://github.com/Anuj0x/openGL-gymnasium' },
+                { name: 'smart-city-comp-vision-', url: 'https://github.com/Anuj0x/smart-city-comp-vision-' },
+                { name: 'style-transfer-compvisn', url: 'https://github.com/Anuj0x/style-transfer-compvisn' },
+                { name: 'swin', url: 'https://github.com/Anuj0x/swin' },
+                { name: 'swinv2', url: 'https://github.com/Anuj0x/swinv2' },
+            ],
+            'LLM, Language Models': [
+                { name: 'AGENT-ASYNC-LLM', url: 'https://github.com/Anuj0x/AGENT-ASYNC-LLM' },
+                { name: 'LlamaCore.rs', url: 'https://github.com/Anuj0x/LlamaCore.rs' },
+                { name: 'MINIbert-from-scratch', url: 'https://github.com/Anuj0x/MINIbert-from-scratch' },
+                { name: 'Modern-DPO-LLaMA', url: 'https://github.com/Anuj0x/Modern-DPO-LLaMA' },
+                { name: 'backprop-in-c-', url: 'https://github.com/Anuj0x/backprop-in-c-' },
+                { name: 'gpt-code-in-rust-candle', url: 'https://github.com/Anuj0x/gpt-code-in-rust-candle' },
+                { name: 'hyper-llm-inference-PROTOTYPE-', url: 'https://github.com/Anuj0x/hyper-llm-inference-PROTOTYPE-' },
+                { name: 'longQlora-in-rust', url: 'https://github.com/Anuj0x/longQlora-in-rust' },
+                { name: 'prefix-tuning-in-julia', url: 'https://github.com/Anuj0x/prefix-tuning-in-julia' },
+            ]
+        };
+
+        // --- DOM MANIPULATION FUNCTIONS ---
+
+        // Function to render skill pills
+        function renderSkills() {
+            for (const [id, skills] of Object.entries(SKILL_DATA)) {
+                const container = document.getElementById(id);
+                if (container) {
+                    container.innerHTML = skills.map(skill => 
+                        `<span class="skill-pill">${skill}</span>`
+                    ).join('');
+                }
+            }
+        }
+
+        // Function to render projects
+        function renderProjects() {
+            const projectContainer = document.getElementById('project-folders');
+            if (projectContainer) {
+                let htmlContent = '';
+                for (const [category, projects] of Object.entries(PROJECT_DATA)) {
+                    htmlContent += `
+                        <div class="mb-4">
+                            <h4 class="text-xl font-semibold mb-3 text-[#8be9fd]">${category}</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                ${projects.map(project => `
+                                    <a href="${project.url}" target="_blank" rel="noopener noreferrer" class="project-card p-4 rounded-xl">
+                                        <div class="flex items-center space-x-2">
+                                            <!-- SVG for repository icon (Folder/Repo icon) -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#58a6ff]"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                                            <span class="project-title-link text-lg font-medium">${project.name}</span>
+                                        </div>
+                                    </a>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                projectContainer.innerHTML = htmlContent;
+            }
+        }
+
+
+        // --- THREE.JS BACKGROUND ---
+        function initThreeJS() {
+            const canvas = document.getElementById('three-canvas');
+            if (!canvas) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Light (subtle ambient light)
+            const ambientLight = new THREE.AmbientLight(0x404040, 5); // soft white light
+            scene.add(ambientLight);
+
+            // Create 3D particles (a matrix-style data flow effect)
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particleCount = 2000;
+            const posArray = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i++) {
+                // Random positions within a cube
+                posArray[i] = (Math.random() - 0.5) * 200;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.2,
+                color: 0x58a6ff, // Blue color for a tech feel
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const particleMesh = new THREE.Points(particlesGeometry, particleMaterial);
+            scene.add(particleMesh);
+
+            camera.position.z = 50;
+
+            // Handle user mouse movement for subtle camera rotation
+            let mouseX = 0;
+            let mouseY = 0;
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Rotate the particles slowly
+                particleMesh.rotation.x += 0.0001;
+                particleMesh.rotation.y += 0.0001;
+
+                // Move particles (simulate data flow)
+                const positions = particleMesh.geometry.attributes.position.array;
+                for (let i = 0; i < particleCount * 3; i += 3) {
+                    // Simple vertical movement (Z axis in the camera's frame)
+                    positions[i + 2] += 0.05; 
+                    if (positions[i + 2] > 100) {
+                        positions[i + 2] = -100; // Reset position
+                    }
+                }
+                particleMesh.geometry.attributes.position.needsUpdate = true;
+
+                // Subtle camera movement based on mouse
+                camera.position.x += (mouseX * 5 - camera.position.x) * 0.01;
+                camera.position.y += (mouseY * 5 - camera.position.y) * 0.01;
+                camera.lookAt(scene.position);
+
+
+                renderer.render(scene, camera);
+            }
+
+            // Handle responsiveness
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            animate();
+        }
+
+        // --- IMAGEN GENERATION LOGIC ---
+
+        function getElement(id) {
+            return document.getElementById(id);
+        }
+
+        const promptInput = getElement('promptInput');
+        const generateButton = getElement('generateBtn');
+        const imageElement = getElement('resultImage');
+        const loadingElement = getElement('loadingIndicator');
+        const errorBox = getElement('errorBox');
+        const errorMessage = getElement('errorMessage');
+
+        const MAX_RETRIES = 5;
+
+        async function generateImage() {
+            const userPrompt = promptInput.value.trim();
+            if (!userPrompt) {
+                // Use custom UI message instead of alert
+                errorMessage.textContent = "Please enter a description for the image.";
+                errorBox.style.display = 'block';
+                return;
+            }
+            
+            errorBox.style.display = 'none';
+            imageElement.style.display = 'none';
+            loadingElement.style.display = 'block';
+
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+
+            const payload = { 
+                instances: { prompt: userPrompt }, 
+                parameters: { "sampleCount": 1 } 
+            };
+
+            for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    // Check if the prediction data exists and extract the base64 string
+                    const base64Data = result?.predictions?.[0]?.bytesBase64Encoded;
+
+                    if (base64Data) {
+                        const imageUrl = `data:image/png;base64,${base64Data}`;
+                        imageElement.src = imageUrl;
+                        imageElement.style.display = 'block'; // Show the image
+                        break; // Success, exit retry loop
+                    } else {
+                        throw new Error("API response was missing image data or response structure was unexpected.");
+                    }
+
+                } catch (error) {
+                    if (attempt < MAX_RETRIES - 1) {
+                        // Implement exponential backoff
+                        const delay = Math.pow(2, attempt) * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        // Log for debugging (but not in the console, as per instruction)
+                    } else {
+                        // Failed after all retries
+                        errorMessage.textContent = `Image generation failed after ${MAX_RETRIES} attempts. Details: ${error.message}`;
+                        errorBox.style.display = 'block';
+                    }
+                }
+            }
+            
+            loadingElement.style.display = 'none';
+        }
+
+        // Attach event listener
+        generateButton.addEventListener('click', generateImage);
+
+
+        // --- INITIALIZATION ---
+        window.onload = function() {
+            renderSkills();
+            renderProjects();
+            initThreeJS();
+        }
+    </script>
+</body>
+</html>
